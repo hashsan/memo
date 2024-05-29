@@ -1,0 +1,125 @@
+
+<!DOCTYPE html>
+<html lang="ja" >
+
+<head>
+  <meta charset="UTF-8">
+  
+  
+  
+
+  <title>memo</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  
+  
+<style>
+*{box-sizing:border-box;}
+body{
+  margin:auto;
+  max-width:500px;
+  background:black;
+  color:white;
+}
+
+main,footer{
+  margin-top:2rem;
+}
+
+footer{
+  color:#aaa;
+  margin-bottom:2rem;
+}
+
+[contentEditable]{
+  outline:none;
+  border:1px solid;
+  border-radius:4px;
+  padding:1rem;
+}
+
+.label{
+  text-align:right;
+}
+</style>
+
+  
+  
+  
+</head>
+
+<body>
+  <header></header>
+<main>
+  <div class="edit" contentEditable="plaintext-only"></div>
+</main>
+<footer>
+  <div class="preview" contentEditable="plaintext-only"></div>
+  <div class="label">-</div>
+</footer>
+  
+      <script id="rendered-js" >
+function fullback(url) {
+  var img = document.querySelector('.fullback');
+  if(!img){
+    img = document.createElement('img')
+    img.classList.add('fullback')
+    img.style = `
+position:fixed;top:0;left:0;
+width:100vw;height:100vh;
+margin:auto;object-fit:contain;
+z-index:-100;
+filter:brightness(0.5);
+    `.trim();
+    document.body.append(img)
+  }
+
+  img.src = url;
+
+  img.onload = function() {
+    img.style.display = 'block';
+  };
+
+  img.onerror = function() {
+    // 画像の読み込みが失敗した場合、背景のグラデーションを維持
+    img.style.display = 'none'; // 画像を非表示
+  };
+}
+
+function preview(){
+  var $preview = document.querySelector('.preview')
+  $preview.onkeydown =(event)=>{
+    if(event.key==='Enter'){
+      event.preventDefault();
+      var src = $preview.textContent;
+      fullback(src);
+    }
+  }  
+}
+
+function load(){
+  const name = '__memo__'
+    
+  const $label = document.querySelector('.label')
+  $label.textContent = name;
+  const $edit = document.querySelector('.edit')
+  $edit.textContent = localStorage.getItem(name)||''
+  //
+  $edit.onkeydown=(event)=>{
+    const data = $edit.textContent;
+    localStorage.setItem(name,data)    
+  }  
+}
+
+load();
+
+preview();
+
+//fullback('https://i.pinimg.com/564x/8d/c1/bf/8dc1bff323e51c2330c63772364e53bf.jpg');
+    </script>
+
+  
+</body>
+
+</html>
